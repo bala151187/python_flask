@@ -1,12 +1,12 @@
 node {
   stage('SCM') {
-    git 'https://github.com/foo/bar.git'
+    git 'https://github.com/bala151187/python_flask.git'
   }
   stage('SonarQube analysis') {
     // requires SonarQube Scanner 2.8+
-    def scannerHome = tool 'SonarQube Scanner 2.8';
+    def scannerHome = tool 'GSonar';
     withSonarQubeEnv('My SonarQube Server') {
-      sh "${scannerHome}/bin/sonar-scanner"
+      bat "\"${scannerHome}\"\\bin\\sonar-scanner"
     }
   }
 }
