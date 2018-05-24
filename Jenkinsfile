@@ -14,7 +14,7 @@ node {
     }
   }
 stage("Quality Gate"){
-  node("sonar") {
+  
     withSonarQubeEnv('My SonarQube Server') {
         def ceTask
         timeout(time: 1, unit: 'MINUTES') {
@@ -35,7 +35,7 @@ stage("Quality Gate"){
         echo  "Quality Gate success"
     }
   }
-}
+
     
 stage('approve') {
     timeout(time: 1, unit: 'MINUTES') {
