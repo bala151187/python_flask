@@ -30,9 +30,8 @@ stage('Aprove') {
     timeout(time: 1, unit: 'MINUTES') {
     emailext (
       to: 'balamurugan151187@gmail.com',
-      subject: Job status,
-      body: Approve,
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+      subject: 'Job status',
+      body: 'Approve'
     )
     }
 }
