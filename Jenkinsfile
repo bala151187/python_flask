@@ -16,8 +16,7 @@ node {
 stage("Quality Gate"){
   
     withSonarQubeEnv('My SonarQube Server') {
-         def props = getProperties(".scannerwork/report-task.txt")
-         env.SONAR_CE_TASK_URL = props.getProperty('ceTaskUrl')
+        
         def ceTask
         timeout(time: 1, unit: 'MINUTES') {
           waitUntil {
