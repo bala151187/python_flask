@@ -1,14 +1,16 @@
 import unittest
-from source.api import app
-from webs import hello
+import flaskapi
+import requests
+import json
+import sys
 
-class AppTestCase(unittest.TestCase):
+class TestFlaskApi(unittest.TestCase):
     def setUp(self):
-        self.app = app.test_client()
-        
-    def test_string(self):     
-        rv = self.app.get('/')
-        assert 'Hello World!' in rv.data
+        self.app = flaskapi.app.test_client()
+
+    def test_hello_world(self):
+        response = self.app.get('/')
+        self.assertEqual(json.loads(response.get_data().decode(sys.getdefaultencoding())), {'hello': 'world'})
 
 if __name__ == '__main__':
     unittest.main()
