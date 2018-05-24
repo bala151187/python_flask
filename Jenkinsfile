@@ -29,7 +29,7 @@ stage("Quality Gate"){
     }
  steps{
     withSonarQubeEnv('My SonarQube Server') {
-     steps{
+     script {
        qualitygate = waitForQualityGate()       
       if (qualitygate.status != "OK") {
          error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
