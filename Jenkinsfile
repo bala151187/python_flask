@@ -2,6 +2,9 @@ node {
   stage('SCM') {
     git 'https://github.com/bala151187/python_flask.git'
   }
+  stage ('Unit test') {
+    bat'python test\\*.py'
+  }
   stage('SonarQube analysis') {
     // requires SonarQube Scanner 2.8+
     def scannerHome = tool 'GSonar';
@@ -9,4 +12,5 @@ node {
       bat "\"${scannerHome}\"\\bin\\sonar-scanner"
     }
   }
+ 
 }
