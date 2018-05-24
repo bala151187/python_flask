@@ -27,7 +27,7 @@ stage("Quality Gate"){
  steps{
     withSonarQubeEnv('My SonarQube Server') {
       timeout(time: 1, unit: 'MINUTES') {
-       environment{
+       environment {
        qualitygate = waitForQualityGate()
        }
       if (qualitygate.status != "OK") {
