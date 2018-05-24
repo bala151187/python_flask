@@ -16,17 +16,24 @@ node {
 stage("Quality Gate"){
   
     withSonarQubeEnv('My SonarQube Server') {
+      timeout(time: 1, unit: 'MINUTES') {
        def qualitygate = waitForQualityGate()
       if (qualitygate.status != "OK") {
          error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
       }
+     }
     }      
   }
 
     
-stage('approve') {
+stage('Aprove') {
     timeout(time: 1, unit: 'MINUTES') {
-      step([$class: 'Mailer', notifyEveryUnstableBuild: false, recipients: 'balamurugan151187@gmail.com', sendToIndividuals: true])
+    emailext (
+      to: 'balamurugan151187@gmail.com',
+      subject: Job status,
+      body: Approve,
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
     }
 }
   
