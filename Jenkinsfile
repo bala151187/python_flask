@@ -3,7 +3,8 @@ node {
     git 'https://github.com/bala151187/python_flask.git'
   }
   stage ('Unit test using coverage') {
-    bat'coverage-3.6.exe run test_webs.py'
+    bat'coverage run test_webs.py'
+    bat'coverage xml -i'
   }
   stage('SonarQube analysis') {
     // requires SonarQube Scanner 2.8+
