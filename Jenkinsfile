@@ -7,8 +7,10 @@ pipeline {
    }
   }
   stage ('Unit test using coverage') {
+   steps{
     bat'coverage run test_webs.py'
     bat'coverage xml -i'
+   }
   }
   stage('SonarQube analysis') {
    steps{
