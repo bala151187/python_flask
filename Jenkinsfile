@@ -1,46 +1,31 @@
-pipeline {
- agent none 
- stages {
+ 
+  node {
   stage('SCM') {
-   steps{
     git 'https://github.com/bala151187/python_flask.git'
-   }
   }
   stage ('Unit test using coverage') {
-   steps{
     bat'coverage run test_webs.py'
     bat'coverage xml -i'
-   }
   }
   stage('SonarQube analysis') {
-    environment { 
-     scannerHome = tool 'GSonar';
-    }
-   steps{
-    // requires SonarQube Scanner 2.8+  
+    // requires SonarQube Scanner 2.8+
+    def scannerHome = tool 'GSonar';
     withSonarQubeEnv('My SonarQube Server') {
       bat "\"${scannerHome}\"\\bin\\sonar-scanner"
     }
-   }
   }
 stage("Quality Gate"){
-       options {
-        timeout(time: 1, unit: 'HOURS') 
-    }
- steps{
     withSonarQubeEnv('My SonarQube Server') {
-     script {
-       qualitygate = waitForQualityGate()       
-      if (qualitygate.status != "OK") {
-         error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+       timeout(time: 1, unit: 'MINUTES') {
+        def qualitygate = waitForQualityGate()       
+         if (qualitygate.status != "OK") {
+           error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
       }
-      }
-    }      
+    }
   }
 }
     
-stage('Aprove') {
- steps{
+stage('approve') {
     timeout(time: 1, unit: 'MINUTES') {
     emailext (
       to: 'balamurugan151187@gmail.com',
@@ -48,7 +33,8 @@ stage('Aprove') {
       body: 'Approve'
     )
    }
- }
 }
- }
+   stage ('Deployment') {
+
+  }
 }
