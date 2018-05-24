@@ -27,7 +27,9 @@ stage("Quality Gate"){
  steps{
     withSonarQubeEnv('My SonarQube Server') {
       timeout(time: 1, unit: 'MINUTES') {
+       environment{
        qualitygate = waitForQualityGate()
+       }
       if (qualitygate.status != "OK") {
          error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
       }
