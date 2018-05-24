@@ -2,21 +2,25 @@ pipeline {
  agent none 
  stages {
   stage('SCM') {
+   steps{
     git 'https://github.com/bala151187/python_flask.git'
+   }
   }
   stage ('Unit test using coverage') {
     bat'coverage run test_webs.py'
     bat'coverage xml -i'
   }
   stage('SonarQube analysis') {
+   steps{
     // requires SonarQube Scanner 2.8+
     def scannerHome = tool 'GSonar';
     withSonarQubeEnv('My SonarQube Server') {
       bat "\"${scannerHome}\"\\bin\\sonar-scanner"
     }
+   }
   }
 stage("Quality Gate"){
-  
+ steps{
     withSonarQubeEnv('My SonarQube Server') {
       timeout(time: 1, unit: 'MINUTES') {
        def qualitygate = waitForQualityGate()
@@ -26,20 +30,22 @@ stage("Quality Gate"){
      }
     }      
   }
-
+}
     
 stage('Aprove') {
+ steps{
     timeout(time: 1, unit: 'MINUTES') {
     emailext (
       to: 'balamurugan151187@gmail.com',
       subject: 'Job status',
       body: 'Approve'
     )
-    }
+   }
+ }
 }
-  
    stage ('Deployment') {
-
+    steps{
+    }
   }
  }
 }
