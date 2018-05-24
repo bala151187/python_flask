@@ -16,10 +16,13 @@ node {
 stage("Quality Gate"){
   
     withSonarQubeEnv('My SonarQube Server') {
+         def props = getProperties(".scannerwork/report-task.txt")
+         env.SONAR_CE_TASK_URL = props.getProperty('ceTaskUrl')
         def ceTask
         timeout(time: 1, unit: 'MINUTES') {
           waitUntil {
-            sh 'curl -u $SONAR_AUTH_TOKEN $SONAR_CE_TASK_URL -o ceTask.json'
+            sh 'echo $SONAR_AUTH_TOKEN $SONAR_CE_TASK_URL'
+            sh 'curl -u dbd529efca4c5cf0dccf3922e67ca4f95183d05a http://localhost:9000//api//ce//task?id=AWOT4Ra2rFhHJOVmscAF -o ceTask.json'
             ceTask = jsonParse(readFile('ceTask.json'))
             echo ceTask.toString()
             return "SUCCESS".equals(ceTask["task"]["status"])
