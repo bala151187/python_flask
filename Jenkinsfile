@@ -2,8 +2,8 @@ node {
   stage('SCM') {
     git 'https://github.com/bala151187/python_flask.git'
   }
-  stage ('Unit test') {
-    bat'python test_webs.py'
+  stage ('Unit test using coverage') {
+    bat'coverage-3.6.exe run test_webs.py'
   }
   stage('SonarQube analysis') {
     // requires SonarQube Scanner 2.8+
