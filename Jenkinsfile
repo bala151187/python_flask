@@ -15,7 +15,7 @@ node {
   }
 stage("Quality Gate"){
   node("sonar") {
-    withSonarQubeEnv('sonarqube-rec') {
+    withSonarQubeEnv('My SonarQube Server') {
         def ceTask
         timeout(time: 1, unit: 'MINUTES') {
           waitUntil {
