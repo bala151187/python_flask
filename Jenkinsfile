@@ -3,7 +3,7 @@ node {
     git 'https://github.com/bala151187/python_flask.git'
   }
   stage ('Unit test') {
-    bat'python test_webs.py'
+    bat'python webs.py'
   }
   stage('SonarQube analysis') {
     // requires SonarQube Scanner 2.8+
