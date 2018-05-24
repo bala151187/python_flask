@@ -13,5 +13,36 @@ node {
       bat "\"${scannerHome}\"\\bin\\sonar-scanner"
     }
   }
- 
+stage("Quality Gate"){
+  node("sonar") {
+    withSonarQubeEnv('sonarqube-rec') {
+        def ceTask
+        timeout(time: 1, unit: 'MINUTES') {
+          waitUntil {
+            sh 'curl -u $SONAR_AUTH_TOKEN $SONAR_CE_TASK_URL -o ceTask.json'
+            ceTask = jsonParse(readFile('ceTask.json'))
+            echo ceTask.toString()
+            return "SUCCESS".equals(ceTask["task"]["status"])
+          }
+        }
+        def qualityGateUrl = env.SONAR_HOST_URL + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"]
+        sh "curl -u $SONAR_AUTH_TOKEN $qualityGateUrl -o qualityGate.json"
+        def qualitygate = jsonParse(readFile('qualityGate.json'))
+        echo qualitygate.toString()
+        if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
+          error  "Quality Gate failure"
+        }
+        echo  "Quality Gate success"
+    }
+  }
+}
+    
+stage('approve') {
+    timeout(time: 1, unit: 'MINUTES') {
+        input message: 'Do you want to continue?'
+    }
+}
+   stage ('Deployment') {
+
+  }
 }
