@@ -1,4 +1,6 @@
-node {
+pipeline {
+ agent none 
+ stages {
   stage('SCM') {
     git 'https://github.com/bala151187/python_flask.git'
   }
@@ -39,4 +41,5 @@ stage('Aprove') {
    stage ('Deployment') {
 
   }
+ }
 }
