@@ -17,22 +17,21 @@ pipeline {
      scannerHome = tool 'GSonar';
     }
    steps{
-    // requires SonarQube Scanner 2.8+
-  
+    // requires SonarQube Scanner 2.8+  
     withSonarQubeEnv('My SonarQube Server') {
       bat "\"${scannerHome}\"\\bin\\sonar-scanner"
     }
    }
   }
 stage("Quality Gate"){
-
+ steps{
     withSonarQubeEnv('My SonarQube Server') {
       timeout(time: 1, unit: 'MINUTES') {
        qualitygate = waitForQualityGate()
       if (qualitygate.status != "OK") {
          error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
       }
-     
+      }
     }      
   }
 }
