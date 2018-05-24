@@ -13,7 +13,9 @@ pipeline {
    }
   }
   stage('SonarQube analysis') {
+    environment { 
      scannerHome = tool 'GSonar';
+    }
    steps{
     // requires SonarQube Scanner 2.8+
   
