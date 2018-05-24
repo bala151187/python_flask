@@ -26,9 +26,10 @@ stage("Quality Gate"){
     
 stage('approve') {
     timeout(time: 1, unit: 'MINUTES') {
-        input message: 'Do you want to continue?'
+      step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'balamurugan151187@gmail.com', sendToIndividuals: true])
     }
 }
+  
    stage ('Deployment') {
 
   }
