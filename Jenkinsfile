@@ -16,26 +16,11 @@ node {
 stage("Quality Gate"){
   
     withSonarQubeEnv('My SonarQube Server') {
-        
-        def ceTask
-        timeout(time: 1, unit: 'MINUTES') {
-          waitUntil {
-          
-            sh 'curl -u dbd529efca4c5cf0dccf3922e67ca4f95183d05a http://localhost:9000//api//ce//task?id=AWOT4Ra2rFhHJOVmscAF -o ceTask.json'
-            ceTask = jsonParse(readFile('ceTask.json'))
-            echo ceTask.toString()
-            return "SUCCESS".equals(ceTask["task"]["status"])
-          }
-        }
-        def qualityGateUrl = env.SONAR_HOST_URL + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"]
-        sh "curl -u $SONAR_AUTH_TOKEN $qualityGateUrl -o qualityGate.json"
-        def qualitygate = jsonParse(readFile('qualityGate.json'))
-        echo qualitygate.toString()
-        if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
-          error  "Quality Gate failure"
-        }
-        echo  "Quality Gate success"
-    }
+       def qualitygate = waitForQualityGate()
+      if (qualitygate.status != "OK") {
+         error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+      }
+      
   }
 
     
