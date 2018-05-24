@@ -24,19 +24,19 @@ pipeline {
    }
   }
 stage("Quality Gate"){
+       options {
+        timeout(time: 1, unit: 'HOURS') 
+    }
  steps{
     withSonarQubeEnv('My SonarQube Server') {
-      timeout(time: 1, unit: 'MINUTES') {
-       environment {
-       qualitygate = waitForQualityGate()
-       }
+       qualitygate = waitForQualityGate()       
       if (qualitygate.status != "OK") {
          error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
       }
       }
     }      
   }
-}
+
     
 stage('Aprove') {
  steps{
