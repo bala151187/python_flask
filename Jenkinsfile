@@ -25,12 +25,12 @@ stage("Quality Gate"){
   }
 }
     
-stage('approve') {
+stage('Notifying Jenkin Job') {
     timeout(time: 1, unit: 'MINUTES') {
     emailext (
       to: 'balamurugan151187@gmail.com',
-      subject: 'Job status',
-      body: 'Approve'
+      subject: 'Job Details',
+      body: ' http://jenkins/job/job_name_being_promoted/77'
     )
    }
 }
