@@ -1,3 +1,3 @@
 FROM ubuntu:18.04
-COPY * /app
+COPY requirements.txt *.py  /app
 RUN python /app/webs.py
