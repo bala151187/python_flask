@@ -1,3 +1,3 @@
 FROM ubuntu:18.04
-ADD requirements.txt webs.py  ./app
+COPY app/*  ./app/
 RUN python /app/webs.py
